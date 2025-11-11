@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Content Writer Portfolio</title>
+    <link rel="stylesheet" href="admin-style.css">
+</head>
+<body>
+    <div id="login-container" class="login-container">
+        <h2>Admin Login</h2>
+        <form id="login-form">
+            <input type="text" id="username" placeholder="Username" required>
+            <input type="password" id="password" placeholder="Password" required>
+            <button type="submit">Login</button>
+        </form>
+        <p id="login-message"></p>
+    </div>
+
+    <div id="dashboard" class="dashboard" style="display: none;">
+        <nav class="admin-nav">
+            <h1>Admin Dashboard</h1>
+            <button id="logout-btn">Logout</button>
+        </nav>
+
+        <div class="dashboard-content">
+            <div class="sidebar">
+                <ul>
+                    <li><a href="#overview" class="active">Overview</a></li>
+                    <li><a href="#services">Services</a></li>
+                    <li><a href="#portfolio">Portfolio</a></li>
+                    <li><a href="#testimonials">Testimonials</a></li>
+                    <li><a href="#settings">Settings</a></li>
+                    <li><a href="#create-admin">Create Admin</a></li>
+                </ul>
+            </div>
+
+            <div class="main-content">
+                <!-- Overview Section -->
+                <section id="overview-section" class="section active">
+                    <h2>At-a-Glance Overview</h2>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <h3 id="services-count">0</h3>
+                            <p>Total Services</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3 id="portfolio-count">0</h3>
+                            <p>Total Portfolio Items</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3 id="testimonials-count">0</h3>
+                            <p>Total Testimonials</p>
+                        </div>
+                    </div>
+                    <h3>Recent Activity</h3>
+                    <ul id="activity-log" class="activity-log">
+                        <!-- Activity log will be loaded here -->
+                    </ul>
+                </section>
+
+                <!-- Services Section -->
+                <section id="services-section" class="section">
+                    <h2>Services Management</h2>
+                    <button id="add-service-btn" class="add-btn">Add Service</button>
+                    <div id="services-list" class="items-list">
+                        <!-- Services will be loaded here -->
+                    </div>
+                </section>
+
+                <!-- Portfolio Section -->
+                <section id="portfolio-section" class="section">
+                    <h2>Portfolio Management</h2>
+                    <button id="add-portfolio-btn" class="add-btn">Add Portfolio Item</button>
+                    <div id="portfolio-list" class="items-list">
+                        <!-- Portfolio items will be loaded here -->
+                    </div>
+                </section>
+
+                <!-- Testimonials Section -->
+                <section id="testimonials-section" class="section">
+                    <h2>Testimonials Management</h2>
+                    <button id="add-testimonial-btn" class="add-btn">Add Testimonial</button>
+                    <div id="testimonials-list" class="items-list">
+                        <!-- Testimonials will be loaded here -->
+                    </div>
+                </section>
+
+                <!-- Settings Section -->
+                <section id="settings-section" class="section">
+                    <h2>Site Settings</h2>
+                    <form id="settings-form">
+                        <label>Business Name:</label>
+                        <input type="text" id="business-name" required>
+
+                        <label>Contact Email:</label>
+                        <input type="email" id="contact-email" required>
+
+                        <label>Phone:</label>
+                        <input type="text" id="phone">
+
+                        <label>Location:</label>
+                        <input type="text" id="location">
+
+                        <label>Scheduler Link:</label>
+                        <input type="url" id="scheduler-link">
+
+                        <label>CTA Button Text:</label>
+                        <input type="text" id="cta-text">
+
+                        <label>CTA Button Link:</label>
+                        <input type="url" id="cta-link">
+
+                        <label>About Bio:</label>
+                        <textarea id="about-bio" rows="5"></textarea>
+
+                        <label>About Image URL:</label>
+                        <input type="url" id="about-image">
+
+                        <label>Social Media Links:</label>
+                        <input type="url" id="social-facebook" placeholder="Facebook">
+                        <input type="url" id="social-twitter" placeholder="Twitter">
+                        <input type="url" id="social-linkedin" placeholder="LinkedIn">
+                        <input type="url" id="social-instagram" placeholder="Instagram">
+
+                        <button type="submit">Save Settings</button>
+                    </form>
+                </section>
+
+                <!-- Create Admin Section -->
+                <section id="create-admin-section" class="section">
+                    <h2>Create New Admin User</h2>
+                    <form id="create-admin-form">
+                        <label>Username:</label>
+                        <input type="text" id="new-username" required>
+
+                        <label>Password:</label>
+                        <input type="password" id="new-password" required>
+
+                        <button type="submit">Create Admin</button>
+                    </form>
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <div id="service-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h3 id="service-modal-title">Add Service</h3>
+            <form id="service-form">
+                <label>Title:</label>
+                <input type="text" id="service-title" required>
+
+                <label>Description:</label>
+                <textarea id="service-description" rows="4" required></textarea>
+
+                <label>Icon URL:</label>
+                <input type="url" id="service-icon">
+
+                <label>Starting Price:</label>
+                <input type="number" id="service-price">
+
+                <button type="submit">Save</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="portfolio-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h3 id="portfolio-modal-title">Add Portfolio Item</h3>
+            <form id="portfolio-form" enctype="multipart/form-data">
+                <label>Title:</label>
+                <input type="text" id="portfolio-title" required>
+
+                <label>Client Name:</label>
+                <input type="text" id="portfolio-client" required>
+
+                <label>Tagline:</label>
+                <input type="text" id="portfolio-tagline" required>
+
+                <label>Image:</label>
+                <input type="file" id="portfolio-image" accept="image/*">
+
+                <label>Description:</label>
+                <textarea id="portfolio-description" rows="6" required></textarea>
+
+                <button type="submit">Save</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="testimonial-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h3 id="testimonial-modal-title">Add Testimonial</h3>
+            <form id="testimonial-form" enctype="multipart/form-data">
+                <label>Name:</label>
+                <input type="text" id="testimonial-name" required>
+
+                <label>Company/Title:</label>
+                <input type="text" id="testimonial-company" required>
+
+                <label>Testimonial Text:</label>
+                <textarea id="testimonial-text" rows="4" required></textarea>
+
+                <label>Photo:</label>
+                <input type="file" id="testimonial-photo" accept="image/*">
+
+                <button type="submit">Save</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="admin-script.js"></script>
+</body>
+</html>
