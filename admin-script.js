@@ -198,22 +198,20 @@ async function loadSettings() {
     try {
         const response = await fetch(`${API_BASE}/settings`);
         const settings = await response.json();
-        if (settings.length > 0) {
-            const setting = settings[0];
-            document.getElementById('business-name').value = setting.businessName || '';
-            document.getElementById('contact-email').value = setting.contactEmail || '';
-            document.getElementById('phone').value = setting.phone || '';
-            document.getElementById('location').value = setting.location || '';
-            document.getElementById('scheduler-link').value = setting.schedulerLink || '';
-            document.getElementById('cta-text').value = setting.ctaText || '';
-            document.getElementById('cta-link').value = setting.ctaLink || '';
-            document.getElementById('about-bio').value = setting.aboutBio || '';
-            document.getElementById('about-image').value = setting.aboutImage || '';
-            document.getElementById('social-facebook').value = setting.socialFacebook || '';
-            document.getElementById('social-twitter').value = setting.socialTwitter || '';
-            document.getElementById('social-linkedin').value = setting.socialLinkedin || '';
-            document.getElementById('social-instagram').value = setting.socialInstagram || '';
-        }
+        // Backend returns a single object, not an array
+        document.getElementById('business-name').value = settings.businessName || '';
+        document.getElementById('contact-email').value = settings.contactEmail || '';
+        document.getElementById('phone').value = settings.phone || '';
+        document.getElementById('location').value = settings.location || '';
+        document.getElementById('scheduler-link').value = settings.schedulerLink || '';
+        document.getElementById('cta-text').value = settings.ctaText || '';
+        document.getElementById('cta-link').value = settings.ctaLink || '';
+        document.getElementById('about-bio').value = settings.aboutBio || '';
+        document.getElementById('about-image').value = settings.aboutImage || '';
+        document.getElementById('social-facebook').value = settings.socialFacebook || '';
+        document.getElementById('social-twitter').value = settings.socialTwitter || '';
+        document.getElementById('social-linkedin').value = settings.socialLinkedin || '';
+        document.getElementById('social-instagram').value = settings.socialInstagram || '';
     } catch (error) {
         console.error('Error loading settings:', error);
     }
@@ -239,17 +237,17 @@ function setupForms() {
             socialLinkedin: document.getElementById('social-linkedin').value,
             socialInstagram: document.getElementById('social-instagram').value,
         };
-        
+
         try {
             const response = await fetch(`${API_BASE}/settings`, {
-                method: 'POST',
+                method: 'PUT', // Changed from POST to PUT for updating settings
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${authToken}`,
                 },
                 body: JSON.stringify(data),
             });
-            
+
             if (response.ok) {
                 alert('Settings saved successfully!');
             } else {
@@ -353,25 +351,24 @@ function setupModals() {
     // Portfolio form
     document.getElementById('portfolio-form').addEventListener('submit', async function(e) {
         e.preventDefault();
-        const formData = new FormData();
-        formData.append('title', document.getElementById('portfolio-title').value);
-        formData.append('client', document.getElementById('portfolio-client').value);
-        formData.append('tagline', document.getElementById('portfolio-tagline').value);
-        formData.append('description', document.getElementById('portfolio-description').value);
-        const imageFile = document.getElementById('portfolio-image').files[0];
-        if (imageFile) {
-            formData.append('image', imageFile);
-        }
-        
+        const data = {
+            title: document.getElementById('portfolio-title').value,
+            client: document.getElementById('portfolio-client').value,
+            tagline: document.getElementById('portfolio-tagline').value,
+            description: document.getElementById('portfolio-description').value,
+            image: document.getElementById('portfolio-image-url').value,
+        };
+
         try {
             const response = await fetch(`${API_BASE}/projects`, {
                 method: 'POST',
                 headers: {
+                    'Content-Type': 'application/json',
                     'Authorization': `Bearer ${authToken}`,
                 },
-                body: formData,
+                body: JSON.stringify(data),
             });
-            
+
             if (response.ok) {
                 alert('Portfolio item saved successfully!');
                 document.getElementById('portfolio-modal').style.display = 'none';
@@ -387,24 +384,23 @@ function setupModals() {
     // Testimonial form
     document.getElementById('testimonial-form').addEventListener('submit', async function(e) {
         e.preventDefault();
-        const formData = new FormData();
-        formData.append('name', document.getElementById('testimonial-name').value);
-        formData.append('company', document.getElementById('testimonial-company').value);
-        formData.append('text', document.getElementById('testimonial-text').value);
-        const photoFile = document.getElementById('testimonial-photo').files[0];
-        if (photoFile) {
-            formData.append('photo', photoFile);
-        }
-        
+        const data = {
+            name: document.getElementById('testimonial-name').value,
+            company: document.getElementById('testimonial-company').value,
+            text: document.getElementById('testimonial-text').value,
+            photo: document.getElementById('testimonial-photo-url').value || '', // Use URL input instead of file
+        };
+
         try {
             const response = await fetch(`${API_BASE}/testimonials`, {
                 method: 'POST',
                 headers: {
+                    'Content-Type': 'application/json',
                     'Authorization': `Bearer ${authToken}`,
                 },
-                body: formData,
+                body: JSON.stringify(data),
             });
-            
+
             if (response.ok) {
                 alert('Testimonial saved successfully!');
                 document.getElementById('testimonial-modal').style.display = 'none';
