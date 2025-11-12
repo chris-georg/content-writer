@@ -222,6 +222,38 @@ function setupForms() {
     // Settings form
     document.getElementById('settings-form').addEventListener('submit', async function(e) {
         e.preventDefault();
+
+        let aboutImageUrl = document.getElementById('about-image').value;
+
+        // Handle file upload for about image
+        const aboutImageFile = document.getElementById('about-image-file').files[0];
+        if (aboutImageFile) {
+            const formData = new FormData();
+            formData.append('image', aboutImageFile);
+
+            try {
+                const uploadResponse = await fetch(`${API_BASE}/uploads/single`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`,
+                    },
+                    body: formData,
+                });
+
+                if (uploadResponse.ok) {
+                    const uploadData = await uploadResponse.json();
+                    aboutImageUrl = uploadData.imageUrl;
+                } else {
+                    alert('Error uploading about image');
+                    return;
+                }
+            } catch (error) {
+                console.error('Error uploading about image:', error);
+                alert('Error uploading about image');
+                return;
+            }
+        }
+
         const data = {
             businessName: document.getElementById('business-name').value,
             contactEmail: document.getElementById('contact-email').value,
@@ -231,7 +263,7 @@ function setupForms() {
             ctaText: document.getElementById('cta-text').value,
             ctaLink: document.getElementById('cta-link').value,
             aboutBio: document.getElementById('about-bio').value,
-            aboutImage: document.getElementById('about-image').value,
+            aboutImage: aboutImageUrl,
             socialFacebook: document.getElementById('social-facebook').value,
             socialTwitter: document.getElementById('social-twitter').value,
             socialLinkedin: document.getElementById('social-linkedin').value,
@@ -240,7 +272,7 @@ function setupForms() {
 
         try {
             const response = await fetch(`${API_BASE}/settings`, {
-                method: 'PUT', // Changed from POST to PUT for updating settings
+                method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${authToken}`,
@@ -250,6 +282,10 @@ function setupForms() {
 
             if (response.ok) {
                 alert('Settings saved successfully!');
+                // Clear file input
+                document.getElementById('about-image-file').value = '';
+                // Reload settings to update frontend
+                loadSettings();
             } else {
                 alert('Error saving settings');
             }
@@ -319,13 +355,45 @@ function setupModals() {
     // Service form
     document.getElementById('service-form').addEventListener('submit', async function(e) {
         e.preventDefault();
+
+        let iconUrl = document.getElementById('service-icon').value;
+
+        // Handle file upload for service icon
+        const iconFile = document.getElementById('service-icon-file').files[0];
+        if (iconFile) {
+            const formData = new FormData();
+            formData.append('image', iconFile);
+
+            try {
+                const uploadResponse = await fetch(`${API_BASE}/uploads/single`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`,
+                    },
+                    body: formData,
+                });
+
+                if (uploadResponse.ok) {
+                    const uploadData = await uploadResponse.json();
+                    iconUrl = uploadData.imageUrl;
+                } else {
+                    alert('Error uploading service icon');
+                    return;
+                }
+            } catch (error) {
+                console.error('Error uploading service icon:', error);
+                alert('Error uploading service icon');
+                return;
+            }
+        }
+
         const data = {
             title: document.getElementById('service-title').value,
             description: document.getElementById('service-description').value,
-            icon: document.getElementById('service-icon').value,
+            icon: iconUrl,
             price: document.getElementById('service-price').value,
         };
-        
+
         try {
             const response = await fetch(`${API_BASE}/services`, {
                 method: 'POST',
@@ -335,11 +403,13 @@ function setupModals() {
                 },
                 body: JSON.stringify(data),
             });
-            
+
             if (response.ok) {
                 alert('Service saved successfully!');
                 document.getElementById('service-modal').style.display = 'none';
                 loadServices();
+                // Clear file input
+                document.getElementById('service-icon-file').value = '';
             } else {
                 alert('Error saving service');
             }
@@ -351,12 +421,44 @@ function setupModals() {
     // Portfolio form
     document.getElementById('portfolio-form').addEventListener('submit', async function(e) {
         e.preventDefault();
+
+        let imageUrl = document.getElementById('portfolio-image-url').value;
+
+        // Handle file upload for portfolio image
+        const imageFile = document.getElementById('portfolio-image-file').files[0];
+        if (imageFile) {
+            const formData = new FormData();
+            formData.append('image', imageFile);
+
+            try {
+                const uploadResponse = await fetch(`${API_BASE}/uploads/single`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`,
+                    },
+                    body: formData,
+                });
+
+                if (uploadResponse.ok) {
+                    const uploadData = await uploadResponse.json();
+                    imageUrl = uploadData.imageUrl;
+                } else {
+                    alert('Error uploading portfolio image');
+                    return;
+                }
+            } catch (error) {
+                console.error('Error uploading portfolio image:', error);
+                alert('Error uploading portfolio image');
+                return;
+            }
+        }
+
         const data = {
             title: document.getElementById('portfolio-title').value,
             client: document.getElementById('portfolio-client').value,
             tagline: document.getElementById('portfolio-tagline').value,
             description: document.getElementById('portfolio-description').value,
-            image: document.getElementById('portfolio-image-url').value,
+            image: imageUrl,
         };
 
         try {
@@ -373,6 +475,8 @@ function setupModals() {
                 alert('Portfolio item saved successfully!');
                 document.getElementById('portfolio-modal').style.display = 'none';
                 loadPortfolio();
+                // Clear file input
+                document.getElementById('portfolio-image-file').value = '';
             } else {
                 alert('Error saving portfolio item');
             }
@@ -384,11 +488,43 @@ function setupModals() {
     // Testimonial form
     document.getElementById('testimonial-form').addEventListener('submit', async function(e) {
         e.preventDefault();
+
+        let photoUrl = document.getElementById('testimonial-photo-url').value;
+
+        // Handle file upload for testimonial photo
+        const photoFile = document.getElementById('testimonial-photo-file').files[0];
+        if (photoFile) {
+            const formData = new FormData();
+            formData.append('image', photoFile);
+
+            try {
+                const uploadResponse = await fetch(`${API_BASE}/uploads/single`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`,
+                    },
+                    body: formData,
+                });
+
+                if (uploadResponse.ok) {
+                    const uploadData = await uploadResponse.json();
+                    photoUrl = uploadData.imageUrl;
+                } else {
+                    alert('Error uploading testimonial photo');
+                    return;
+                }
+            } catch (error) {
+                console.error('Error uploading testimonial photo:', error);
+                alert('Error uploading testimonial photo');
+                return;
+            }
+        }
+
         const data = {
             name: document.getElementById('testimonial-name').value,
             company: document.getElementById('testimonial-company').value,
             text: document.getElementById('testimonial-text').value,
-            photo: document.getElementById('testimonial-photo-url').value || '', // Use URL input instead of file
+            photo: photoUrl,
         };
 
         try {
@@ -405,6 +541,8 @@ function setupModals() {
                 alert('Testimonial saved successfully!');
                 document.getElementById('testimonial-modal').style.display = 'none';
                 loadTestimonials();
+                // Clear file input
+                document.getElementById('testimonial-photo-file').value = '';
             } else {
                 alert('Error saving testimonial');
             }

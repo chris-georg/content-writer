@@ -35,7 +35,7 @@ async function loadServices() {
         const servicesList = document.getElementById('services-list');
         servicesList.innerHTML = services.map(service => `
             <div class="service-item">
-                <img src="${service.icon || 'https://via.placeholder.com/80'}" alt="${service.title}">
+                <img src="${service.icon ? `${API_BASE.replace('/api', '')}${service.icon}` : 'https://via.placeholder.com/80'}" alt="${service.title}">
                 <h3>${service.title}</h3>
                 <p>${service.description}</p>
                 ${service.price ? `<p class="service-price">Starting at $${service.price}</p>` : ''}
@@ -54,7 +54,7 @@ async function loadPortfolio() {
         const portfolioList = document.getElementById('portfolio-list');
         portfolioList.innerHTML = projects.map(project => `
             <div class="portfolio-item" onclick="openPortfolioModal('${project._id}')">
-                <img src="${project.image}" alt="${project.title}">
+                <img src="${project.image ? `${API_BASE.replace('/api', '')}${project.image}` : ''}" alt="${project.title}">
                 <h3>${project.title}</h3>
                 <p>${project.tagline}</p>
             </div>
@@ -72,7 +72,7 @@ async function loadTestimonials() {
         const testimonialsList = document.getElementById('testimonials-list');
         testimonialsList.innerHTML = testimonials.map(testimonial => `
             <div class="testimonial-item">
-                ${testimonial.photo ? `<img src="${testimonial.photo}" alt="${testimonial.name}">` : ''}
+                ${testimonial.photo ? `<img src="${testimonial.photo ? `${API_BASE.replace('/api', '')}${testimonial.photo}` : ''}" alt="${testimonial.name}">` : ''}
                 <blockquote>"${testimonial.text}"</blockquote>
                 <cite>${testimonial.name}, ${testimonial.company}</cite>
             </div>
@@ -87,19 +87,18 @@ async function loadSettings() {
     try {
         const response = await fetch(`${API_BASE}/settings`);
         const settings = await response.json();
-        if (settings.length > 0) {
-            const setting = settings[0];
-            document.querySelector('.logo').textContent = setting.businessName || 'WriterName';
-            document.getElementById('about-image').src = setting.aboutImage || '';
-            document.getElementById('about-bio').textContent = setting.aboutBio || '';
-            document.getElementById('contact-email').textContent = `Email: ${setting.contactEmail || ''}`;
-            document.getElementById('contact-scheduler').href = setting.schedulerLink || '#';
-            document.getElementById('social-facebook').href = setting.socialFacebook || '#';
-            document.getElementById('social-twitter').href = setting.socialTwitter || '#';
-            document.getElementById('social-linkedin').href = setting.socialLinkedin || '#';
-            document.getElementById('social-instagram').href = setting.socialInstagram || '#';
-            document.querySelector('.hero .cta-button').textContent = setting.ctaText || 'View My Work';
-            document.querySelector('.hero .cta-button').href = setting.ctaLink || '#portfolio';
+        if (settings) {
+            document.querySelector('.logo').textContent = settings.businessName || 'WriterName';
+            document.getElementById('about-image').src = settings.aboutImage ? `${API_BASE.replace('/api', '')}${settings.aboutImage}` : '';
+            document.getElementById('about-bio').textContent = settings.aboutBio || 'Bio will be loaded dynamically.';
+            document.getElementById('contact-email').textContent = `Email: ${settings.contactEmail || 'loading...'}`;
+            document.getElementById('contact-scheduler').href = settings.schedulerLink || '#';
+            document.getElementById('social-facebook').href = settings.socialFacebook || '#';
+            document.getElementById('social-twitter').href = settings.socialTwitter || '#';
+            document.getElementById('social-linkedin').href = settings.socialLinkedin || '#';
+            document.getElementById('social-instagram').href = settings.socialInstagram || '#';
+            document.querySelector('.hero .cta-button').textContent = settings.ctaText || 'View My Work';
+            document.querySelector('.hero .cta-button').href = settings.ctaLink || '#portfolio';
         }
     } catch (error) {
         console.error('Error loading settings:', error);
@@ -154,7 +153,7 @@ async function openPortfolioModal(projectId) {
         const response = await fetch(`${API_BASE}/projects/${projectId}`);
         const project = await response.json();
         document.getElementById('modal-title').textContent = project.title;
-        document.getElementById('modal-image').src = project.image;
+        document.getElementById('modal-image').src = project.image ? `${API_BASE.replace('/api', '')}${project.image}` : '';
         document.getElementById('modal-description').innerHTML = project.description;
         document.getElementById('portfolio-modal').style.display = 'block';
     } catch (error) {
